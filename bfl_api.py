@@ -168,6 +168,18 @@ class Flux(FluxBase):
             "poll_endpoint": (["v1/get_result"], {"default": "v1/get_result"}),
             "prompt": ("STRING", {"multiline": True}),
         },
+        "optional": {
+            "image_prompt": ("IMAGE",),
+            "width": ("INT", {"default": 1024, "min": 256, "max": 1440, "step": 32}),
+            "height": ("INT", {"default": 768, "min": 256, "max": 1440, "step": 32}),
+            "prompt_upsampling": ("BOOLEAN", {"default": True, "label_on": "True", "label_off": "False"}),
+            "seed": ("INT", {"default": 0, "min": 0, "max": 4294967294}),
+            "safety_tolerance": ("INT", {"default": 2, "min": 0, "max": 6}),
+            "output_format": (["jpeg", "png"], {"default": "png"}),
+            "webhook_url": ("STRING", {"multiline": False}),
+            "webhook_secret": ("STRING", {"multilne": False}),
+            "api_key_override": ("STRING", {"multiline": False}),
+        },
     }
     POLL_ENDPOINT = "v1/get_result"
     RETURN_TYPES = ("IMAGE",)
