@@ -145,6 +145,41 @@ class FluxBase:
         return mask
 
 
+class Flux(FluxBase):
+    ACCEPT = "image/*"
+    API_ENDPOINT = "v1/flux-dev"
+    INPUT_SPEC = {
+        "required": {
+            "accept": (["image/*"], {"default": "image/*"}),
+            "api_endpoint": ([
+                "v1/flux-dev",
+                "v1/flux-pro",
+                "v1/flux-pro-1.0-fill",
+                "v1/flux-pro-1.0-canny",
+                "v1/flux-pro-1.0-depth",
+                "v1/flux-pro-1.1",
+                "v1/flux-pro-1.1-ultra",
+                "v1/flux-pro-finetuned",
+                "v1/flux-pro-1.0-canny-finetuned",
+                "v1/flux-pro-1.0-depth-finetuned",
+                "v1/flux-pro-1.0-fill-finetuned",
+                "v1/flux-pro-1.1-ultra-finetuned",
+            ], {"default": "v1/flux-dev"}),
+            "poll_endpoint": (["v1/get_result"], {"default": "v1/get_result"}),
+            "prompt": ("STRING", {"multiline": True}),
+        },
+    }
+    POLL_ENDPOINT = "v1/get_result"
+    RETURN_TYPES = ("IMAGE",)
+
+    def call(self, *args, **kwargs):
+        if "image_prompt" in kwargs and kwargs["image_prompt"] is not None:
+            kwargs["image_prompt"] = self._convert_image_to_base64(
+                kwargs["image_prompt"]
+            )
+        return super().call(*args, **kwargs)
+
+
 class FluxPro(FluxBase):
     API_ENDPOINT = "v1/flux-pro"
     POLL_ENDPOINT = "v1/get_result"
