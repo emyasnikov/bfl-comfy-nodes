@@ -197,10 +197,18 @@ class Flux(FluxBase):
     RETURN_TYPES = ("IMAGE",)
 
     def call(self, *args, **kwargs):
+        if "control_image" in kwargs:
+            kwargs["control_image"] = self._convert_image_to_base64(kwargs["control_image"])
+        if "high_threshold" in kwargs:
+            kwargs["canny_high_threshold"] = int(kwargs.pop("high_threshold"))
+        if "image" in kwargs:
+            kwargs["image"] = self._convert_image_to_base64(kwargs["image"])
         if "image_prompt" in kwargs and kwargs["image_prompt"] is not None:
-            kwargs["image_prompt"] = self._convert_image_to_base64(
-                kwargs["image_prompt"]
-            )
+            kwargs["image_prompt"] = self._convert_image_to_base64(kwargs["image_prompt"])
+        if "low_threshold" in kwargs:
+            kwargs["canny_low_threshold"] = int(kwargs.pop("low_threshold"))
+        if "mask" in kwargs and kwargs["mask"] is not None:
+            kwargs["mask"] = self._convert_mask_to_base64(kwargs["mask"])
         return super().call(*args, **kwargs)
 
 
